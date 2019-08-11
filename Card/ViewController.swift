@@ -39,7 +39,7 @@ class ViewController: UIViewController {
         centerOfCard = baseCard.center
     }
 
-
+    // ロード完了時に呼ばれる
     override func viewDidLoad() {
         super.viewDidLoad()
         // personListにperson1から5を追加
@@ -50,6 +50,15 @@ class ViewController: UIViewController {
         personList.append(person5)
     }
 
+    // view表示前に呼ばれる（遷移すると戻ってくる度によばれる）
+    override func viewWillAppear(_ animated: Bool) {
+        // カウント初期化
+        selectedCardCount = 0
+        // リスト初期化
+        likedName = []
+    }
+
+    // セグエによる遷移前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
         if segue.identifier == "ToLikedList" {
@@ -57,6 +66,21 @@ class ViewController: UIViewController {
 
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
             vc.likedName = likedName
+        }
+    }
+
+    // 完全に遷移が行われ、スクリーン上からViewControllerが表示されなくなったときに呼ばれる
+    override func viewDidDisappear(_ animated: Bool) {
+        // ユーザーカードを元に戻す
+        resetPersonList()
+    }
+
+    func resetPersonList() {
+        // 5人の飛んで行ったビューを元の位置に戻す
+        for person in personList {
+            // 元に戻す処理
+            person.center = self.centerOfCard
+            person.transform = .identity
         }
     }
 
@@ -68,6 +92,7 @@ class ViewController: UIViewController {
         baseCard.transform = .identity
     }
 
+    // スワイプ処理
     @IBAction func swipeCard(_ sender: UIPanGestureRecognizer) {
 
         // ベースカード
@@ -84,6 +109,8 @@ class ViewController: UIViewController {
         card.transform = CGAffineTransform(rotationAngle: xfromCenter / (view.frame.width / 2) * -0.785)
         // ユーザーカードに角度をつける
         personList[selectedCardCount].transform = CGAffineTransform(rotationAngle: xfromCenter / (view.frame.width / 2) * -0.785)
+
+        // likeImageの表示のコントロール
         if xfromCenter > 0 {
             // goodを表示
             likeImage.image = #imageLiteral(resourceName: "いいね")
@@ -133,6 +160,7 @@ class ViewController: UIViewController {
                 likedName.append(nameList[selectedCardCount])
                 // 次のカードへ
                 selectedCardCount += 1
+                
                 if selectedCardCount >= personList.count {
                     // 遷移処理
                     performSegue(withIdentifier: "ToLikedList", sender: self)
@@ -154,8 +182,6 @@ class ViewController: UIViewController {
         }
     }
 
-
-
     // よくないねボタン
     @IBAction func dislikeButtonTapped(_ sender: Any) {
 
@@ -172,6 +198,7 @@ class ViewController: UIViewController {
             performSegue(withIdentifier: "ToLikedList", sender: self)
         }
     }
+
     // いいねボタン
     @IBAction func likeButtonTaped(_ sender: Any) {
 

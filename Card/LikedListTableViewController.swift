@@ -28,16 +28,20 @@ class LikedListTableViewController: UITableViewController {
         return likedName.count
     }
     // セルの高さ
+    override func tableView(_ tableView: UITableView, heightForRowAt indexpath: IndexPath) -> CGFloat {
+        return 100
+    }
     
 
     // 必須:セルの設定
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! TableViewCell
 
         // いいねされた名前を表示
-        cell.textLabel?.text = likedName[indexPath.row]
-        cell.textLabel?.text = jobLike[indexPath.row]
-        cell.textLabel?.text = fromeLiked[indexPath.row]
+        cell.nameLabel.text = likedName[indexPath.row]
+        cell.jobLabel.text = jobLike[indexPath.row]
+        cell.fromLabel.text = fromeLiked[indexPath.row]
+        cell.imageView2.image = UIImage(named: likedName[indexPath.row])
         return cell
     }
 

@@ -12,9 +12,12 @@ class LikedListTableViewController: UITableViewController {
 
     // いいね」された名前の一覧
     var likedName: [String] = []
+    var jobLike: [String] = []
+    var fromeLiked: [String] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.tableView.register(UINib(nibName: "TableViewCell", bundle: nil), forCellReuseIdentifier: "Cell")
     }
 
     // MARK: - Table view data source
@@ -24,6 +27,8 @@ class LikedListTableViewController: UITableViewController {
         // いいねされたユーザーの数
         return likedName.count
     }
+    // セルの高さ
+    
 
     // 必須:セルの設定
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -31,6 +36,8 @@ class LikedListTableViewController: UITableViewController {
 
         // いいねされた名前を表示
         cell.textLabel?.text = likedName[indexPath.row]
+        cell.textLabel?.text = jobLike[indexPath.row]
+        cell.textLabel?.text = fromeLiked[indexPath.row]
         return cell
     }
 

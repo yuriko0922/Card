@@ -31,7 +31,14 @@ class ViewController: UIViewController {
     let nameList: [String] = ["津田梅子","ジョージワシントン","ガリレオガリレイ","板垣退助","ジョン万次郎"]
     // 「いいね」をされた名前の配列
     var likedName: [String] = []
-
+// 職業リスト
+    let jobList: [String]  = ["教師","大統領","物理学者","議員","冒険家"]
+    // いいねされた人の仕事の配列
+    var jobLike: [String] = []
+    // 出身地リスト
+    let fromList: [String] = ["千葉","アメリカ","イタリア","高知","アメリカ"]
+    // いいねをされた出身地の配列
+    var fromeLiked: [String] = []
 
     // viewのレイアウト処理が完了した時に呼ばれる
     override func viewDidLayoutSubviews() {
@@ -56,6 +63,8 @@ class ViewController: UIViewController {
         selectedCardCount = 0
         // リスト初期化
         likedName = []
+        jobLike = []
+        fromeLiked = []
     }
 
     // セグエによる遷移前に呼ばれる
@@ -66,6 +75,8 @@ class ViewController: UIViewController {
 
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
             vc.likedName = likedName
+            vc.jobLike = jobLike
+            vc.fromeLiked = fromeLiked
         }
     }
 
@@ -141,8 +152,12 @@ class ViewController: UIViewController {
 
                 if selectedCardCount >= personList.count {
                     // 遷移処理
+                    if likedName.isEmpty {
+                        performSegue(withIdentifier: "nolikeomage", sender: self)
+                    } else {
                     performSegue(withIdentifier: "ToLikedList", sender: self)
                 }
+             }
 
             } else if card.center.x > self.view.frame.width - 50 {
                 // 右に大きくスワイプしたときの処理
@@ -195,7 +210,11 @@ class ViewController: UIViewController {
         selectedCardCount += 1
         // 画面遷移
         if selectedCardCount >= personList.count {
-            performSegue(withIdentifier: "ToLikedList", sender: self)
+            if likedName.isEmpty {
+                performSegue(withIdentifier: "nolikeomage", sender: self)
+            } else {
+                performSegue(withIdentifier: "ToLikedList", sender: self)
+            }
         }
     }
 
@@ -208,6 +227,8 @@ class ViewController: UIViewController {
         })
         // いいねリストに追加
         likedName.append(nameList[selectedCardCount])
+        jobLike.append(jobList[selectedCardCount])
+        fromeLiked.append(fromList[selectedCardCount])
         selectedCardCount += 1
         // 画面遷移
         if selectedCardCount >= personList.count {

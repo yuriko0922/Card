@@ -9,16 +9,15 @@
 import UIKit
 
 class TableViewCell: UITableViewCell {
-
     
     
+    // 画像のやつ紐ずけ
     @IBOutlet weak var imageView2: UIImageView!
-    
+    // 名前ラベル紐ずけ
     @IBOutlet weak var nameLabel: UILabel!
-    
+    // 仕事ラベル紐ずけ
     @IBOutlet weak var jobLabel: UILabel!
-    
-    
+    // 出身地ラベル紐ずけ
     @IBOutlet weak var fromLabel: UILabel!
     
     
@@ -26,10 +25,10 @@ class TableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
     

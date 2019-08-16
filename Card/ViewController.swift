@@ -9,7 +9,7 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     // viewの動作をコントロールする
     @IBOutlet weak var baseCard: UIView!
     // スワイプ中にgood or bad の表示
@@ -41,7 +41,7 @@ class ViewController: UIViewController {
     
     // ユーザーリスト
     let userList: [UserData] = [
-
+        
         UserData(name: "津田梅子", image: #imageLiteral(resourceName: "津田梅子"), job: "教師", homeTown: "千葉", backColor: #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)),
         UserData(name: "ジョージワシントン", image: #imageLiteral(resourceName: "ジョージワシントン"), job: "大統領", homeTown: "アメリカ", backColor: #colorLiteral(red: 0.2588235438, green: 0.7568627596, blue: 0.9686274529, alpha: 1)),
         UserData(name: "ガリレオガリレイ", image: #imageLiteral(resourceName: "ガリレオガリレイ"), job: "物理学者", homeTown: "イタリア", backColor: #colorLiteral(red: 0.2196078449, green: 0.007843137719, blue: 0.8549019694, alpha: 1)),
@@ -50,34 +50,30 @@ class ViewController: UIViewController {
     ]
     // 「いいね」をされた名前の配列
     var likedName: [String] = []
-
-
+    
     // viewのレイアウト処理が完了した時に呼ばれる
     override func viewDidLayoutSubviews() {
         // ベースカードの中心を代入
         centerOfCard = baseCard.center
     }
-
+    
     // ロード完了時に呼ばれる
     override func viewDidLoad() {
         super.viewDidLoad()
         personList.append(person1)
         personList.append(person2)
     }
-
     
-
     // セグエによる遷移前に呼ばれる
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
+        
         if segue.identifier == "ToLikedList" {
             let vc = segue.destination as! LikedListTableViewController
-
             // LikedListTableViewControllerのlikedName(左)にViewCountrollewのLikedName(右)を代入
             vc.likedName = likedName
         }
     }
-
+    
     // 完全に遷移が行われ、スクリーン上からViewControllerが表示されなくなったときに呼ばれる
     override func viewDidDisappear(_ animated: Bool) {
         // カウント初期化
@@ -101,7 +97,6 @@ class ViewController: UIViewController {
         checkUserCard(showViewNumber: 1)
         // カウント元に戻す
         selectedCardCount = 0
-        
     }
     // ベースカードを元に戻す
     func resetCard() {
@@ -111,7 +106,7 @@ class ViewController: UIViewController {
         baseCard.transform = .identity
     }
     
-// ユーザーカードを次に進める処理
+    // ユーザーカードを次に進める処理
     func nextUserView() {
         // 後ろに持ってく
         self.view.sendSubviewToBack(personList[selectedCardCount])
@@ -134,7 +129,6 @@ class ViewController: UIViewController {
             person1.alpha = 0
             // 遷移の処理
             performSegue(withIdentifier: "ToLikedList", sender: self)
-            
         }
         selectedCardCount = showViewCount % 2
     }
@@ -153,9 +147,9 @@ class ViewController: UIViewController {
             // ラベルに出身地を表示させる
             personOrigin1.text = user.homeTown
             // 画像を表示させる
-           image1.image = user.image
+            image1.image = user.image
         } else {
-           // ビューの背景に色をつける
+            // ビューの背景に色をつける
             person2.backgroundColor = user.backColor
             // ラベルに名前を表示させる
             personName2.text = user.name
@@ -166,7 +160,6 @@ class ViewController: UIViewController {
             // 画像を表示させる
             image2.image = user.image
         }
-        
     }
     func farCard(distance: CGFloat, button: UIButton?) {
         UIView.animate(withDuration: 0.5, animations: {
@@ -175,7 +168,7 @@ class ViewController: UIViewController {
             self.personList[self.selectedCardCount].center = CGPoint(x: self.personList[self.selectedCardCount].center.x + distance, y :self.personList[self.selectedCardCount].center.y)
         })
         
-        // ボタンかスワイプかを判断
+        // ボタンかスワイプかを判断させる
         if button != nil {
             // ボタンを使えなくする(連打防止)
             button?.isEnabled = false
@@ -192,11 +185,11 @@ class ViewController: UIViewController {
         // ベースカードを元に戻す
         resetCard()
     }
-
-
+    
+    
     // スワイプ処理
     @IBAction func swipeCard(_ sender: UIPanGestureRecognizer) {
-
+        
         // ベースカード
         let card = sender.view!
         // 動いた距離
@@ -211,7 +204,7 @@ class ViewController: UIViewController {
         card.transform = CGAffineTransform(rotationAngle: xfromCenter / (view.frame.width / 2) * -0.785)
         // ユーザーカードに角度をつける
         personList[selectedCardCount].transform = CGAffineTransform(rotationAngle: xfromCenter / (view.frame.width / 2) * -0.785)
-
+        
         // likeImageの表示のコントロール
         if xfromCenter > 0 {
             // goodを表示
@@ -222,10 +215,10 @@ class ViewController: UIViewController {
             likeImage.image = #imageLiteral(resourceName: "よくないね")
             likeImage.isHidden = false
         }
-
+        
         // 元の位置に戻す処理
         if sender.state == UIGestureRecognizer.State.ended {
-
+            
             if card.center.x < 50 {
                 // 左に大きくスワイプしたときの処理
                 farCard(distance: -500, button: nil)
@@ -251,24 +244,20 @@ class ViewController: UIViewController {
                     self.likeImage.isHidden = true
                 })
             }
-            
         }
     }
-
+    
     // よくないねボタン
     @IBAction func dislikeButtonTapped(_ sender: UIButton) {
-
-       // カードバイバイ  左
+        // カードバイバイ  左
         farCard(distance: -500, button: sender)
     }
     // いいねボタン
     @IBAction func likeButtonTaped(_ sender: UIButton) {
-sender.isEnabled = false
-        
+        sender.isEnabled = false
         // いいねリストに追加
         likedName.append(userList[showViewCount].name)
-       // カードバイバイ　右
-       farCard(distance: 500, button: sender)
+        // カードバイバイ　右
+        farCard(distance: 500, button: sender)
     }
-
 }

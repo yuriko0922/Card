@@ -9,9 +9,8 @@
 import Foundation
 import UIKit
 
-// ユーザーカードを表示させるために必要な構造体
+// ユーザーカードを表示させるための定義集
 struct UserData {
-    
     // 人物の名前
     var name: String
     // 人物の画像
@@ -22,5 +21,4 @@ struct UserData {
     var homeTown: String
     // 背景色
     var backColor: UIColor
-    
 }
